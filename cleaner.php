@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL Cleaner</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<h1>URL Cleaner</h1>
+
 <?php
 
 // Turn off all error reporting
@@ -8,13 +18,15 @@ require_once ("functions.php");
 
 // Initialize URL to the variable
 $url = $_POST['url'];
-
-// Test URL
-//$url = "https://www.amazon.com/?bbb=123&smid=123&aaa=123&qid=222";
-//$url = "aHR0cHM6Ly93d3cuYW1hem9uLmNvbS8/YmJiPTEyMyZzbWlkPTEyMyZhYWE9MTIzJnFpZD0yMjI=";
-
 $cleaned_url = clean_url($url);
 
 // Output cleaned URL
-echo "Cleaned URL: <br>\n";
-echo "<a href='" . $cleaned_url . "' target='_blank'>" . $cleaned_url . "</a>";
+echo "<p><strong>Original URL: </strong></p>";
+echo "<p>" . $url . "</p>";
+echo "<p><strong>Cleaned URL: </strong></p>";
+echo "<p><a href='" . $cleaned_url . "' target='_blank'>" . $cleaned_url . "</a></p>";
+
+?>
+
+</body>
+</html>

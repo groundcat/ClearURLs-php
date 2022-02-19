@@ -16,4 +16,5 @@ $API_Obj->original_url = $url;
 $API_Obj->cleaned_url = $cleaned_url;
 $result = json_encode($API_Obj);
 echo $result;
+
 ?>
