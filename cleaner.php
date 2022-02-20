@@ -13,6 +13,11 @@
 // Turn off all error reporting
 error_reporting(0);
 
+// Testing URLs:
+// http://example.com/store/?cmpid=1&other=2
+// https://www.amazon.com/?smid=123&other=2
+// https://zhihu.com/search?search_source=1&other=2
+
 // Functions
 require_once ("functions.php");
 

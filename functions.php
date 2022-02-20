@@ -31,7 +31,10 @@ function get_adg_specific_rules($adg_rule_url) {
             // Get the pattern, provider name, and param from this line
             $line_arr = explode('$', $line);
             $pattern = $line_arr[0];
-            $provider = preg_replace('/[^A-Za-z0-9.\-]/', '', $pattern); // get a provider name in clean format
+            $provider = preg_replace('/[^A-Za-z0-9\-]/', '', $pattern); // get a provider name in clean format
+            $pattern = preg_replace('/[^A-Za-z0-9.*\/\-]/', '', $pattern); // only keep digits, letters, * and /
+            $pattern =  str_replace("/","\/", $pattern); // escape "/"
+            $pattern =  "/" . $pattern . "/"; // convert to regex
             $param = explode('=',$line_arr[1])[1];
             echo "pattern: ". $pattern . "\n";
             echo "provider: ". $provider . "\n";
@@ -40,11 +43,11 @@ function get_adg_specific_rules($adg_rule_url) {
             // Create a new provider if it's not the same provide as in the last loop
             if ($provider != $provider_current_loop) {
                 //$rule_obj->providers->$provider = (object)[];
-                $rule_obj->providers->$provider->domain = $provider;
+                $rule_obj->providers->$provider->pattern = $pattern;
                 $rule_obj->providers->$provider->rules = array();
             } else {
                 // Append the pattern
-                $rule_obj->providers->$provider->domain = $provider;
+                $rule_obj->providers->$provider->pattern = $pattern;
             }
 
             // Append the param
@@ -69,7 +72,7 @@ function get_adg_general_rules($adg_rule_url) {
 
     // Declare $rule_obj as an object of stdClass in the global namespace
     $rule_obj = new stdClass();
-    $rule_obj->providers->general->domain = ".";
+    $rule_obj->providers->general->pattern = "*";
     $rule_obj->providers->general->rules = array();
 
     // Iterate over each line in the rule set
@@ -129,12 +132,19 @@ function clean_url($url) {
     // Using JSON rules
     $providers_array = json_decode($rules_json, FILE_USE_INCLUDE_PATH);
     foreach($providers_array as $provider) {
-        if (strpos($url, $provider['domain'])) {
+        //if (strpos($url, $provider['pattern'])) {
+        // echo $provider['pattern'] . "\n";
+        if (preg_match($provider['pattern'], $url) || $provider['pattern'] == "*") {
             $rules = $provider['rules'];
             foreach($rules as $rule) {
                 $url = remove_url_get_var($url, $rule);
             }
         }
+    }
+
+    // Clean the tailing char
+    if ($url[-1] == "?" || $url[-1] == "&") {
+        $url = substr_replace($url, "", -1);
     }
 
     return $url;

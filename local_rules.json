@@ -1,7 +1,7 @@
 {
   "providers":{
     "wechat":{
-      "domain":"weixin.qq.com",
+      "pattern":"weixin.qq.com",
       "rules":[
         "chksm",
         "key",
